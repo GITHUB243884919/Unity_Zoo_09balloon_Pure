@@ -159,11 +159,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82b49e2471a60b4409056c713f08254b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isUsedData: 0
+  isUsedData: 1
   isExceptionQuit: 0
   isShowException: 0
   language: 6
-  isUsedlanguage: 1
+  isUsedlanguage: 0
   runTimeLoaderType: 1
   ExtendLoadGroupNum: 1
   debugCamera: 0
