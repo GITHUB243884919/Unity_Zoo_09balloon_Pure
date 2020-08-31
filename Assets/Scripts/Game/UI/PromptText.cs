@@ -127,6 +127,11 @@ public class PromptText
         Instance().CreateText(langeKey);
     }
 
+    public static void CreatePromptTextPure(string langeKey)
+    {
+        Instance().CreateTextPure(langeKey);
+    }
+
     private readonly float ColorTime = 0.1f;
 //    1 字的透明度从0-255  耗时0.1s
 //    2 字的位置从初始位置上移150像素，sineout 耗时1s
@@ -167,6 +172,40 @@ public class PromptText
                               });
                       });
                   });
+        });
+    }
+
+    private void CreateTextPure(string langeKey)
+    {
+        var obj = Resources.Load("uiprefab/TitleText", typeof(GameObject)) as GameObject;
+        var go = GameObject.Instantiate<GameObject>(obj, UIRoot.Instance.promptRoot) as GameObject;
+        go.transform.localScale = Vector3.one;
+        var rect = go.transform as RectTransform;
+        Text text = go.GetComponentInChildren<Text>();
+        textColor = text.color;
+        //text.SetText(langeKey);
+        text.text = langeKey;
+        //text.text = "AD_Fail";
+        rect.anchoredPosition = Vector2.zero;
+        text.color = new Color(textColor.r, textColor.g, textColor.b, 0);
+        //1 字的透明度从0-255  耗时0.1s
+        text.DOFade(1, ColorTime).SetEase(Ease.Linear).OnComplete(() => {
+            //            2 字的位置从初始位置上移150像素，sineout 耗时1s
+            rect.DOLocalMove(rect.localPosition + new Vector3(0, 150, 0), 1).SetEase(Ease.OutSine).OnComplete(() =>
+            {
+                //3 停留在该位置1s
+                Observable.Timer(TimeSpan.FromSeconds(1)).Subscribe(_ =>
+                {
+                    //    4 字的位置再次上移100像素，sinein 耗时0.5s
+                    rect.DOLocalMove(rect.localPosition + new Vector3(0, 100, 0), 0.5f).SetEase(Ease.InSine)
+                          .OnComplete(() => {
+                                  //    5 字的透明度从255-0  耗时0.1s
+                                  text.DOFade(0, ColorTime).SetEase(Ease.Linear).OnComplete(() => {
+                                  GameObject.Destroy(go);
+                              });
+                          });
+                });
+            });
         });
     }
 

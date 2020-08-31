@@ -19,7 +19,7 @@ namespace UFrame
 
 		public void ShowRewardADImp(System.Action<bool> cb)
 		{
-
+			PromptText.CreatePromptTextPure("Coming soon\r\nWe will provide this feature in the next release");
 		}
 	}
 }
